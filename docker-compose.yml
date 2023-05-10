@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  bot:
+    build: .
+    restart: always
+    working_dir: /apps
+    container_name: pizzabot
+    environment:
+      TOKEN:
+      DATABASE: postgres
+      DB_HOST: pg
+      DB_PORT: 5432
+    command: python main.py
+    depends_on:
+      - pg
+  pg:
+    image: postgres:14.1-alpine
+    hostname: pg
+    restart: always
+    container_name: my_postgres
+    environment:
+      - POSTGRES_PASSWORD=1
+    volumes:
+      - pg_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+volumes:
+  pg_data:
